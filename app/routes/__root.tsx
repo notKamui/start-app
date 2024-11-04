@@ -15,10 +15,10 @@ export const Route = createRootRoute({
       title: 'Tanstack Start Starter',
     },
   ],
-  component: RootComponent,
+  component: RouteComponent,
 })
 
-function RootComponent() {
+function RouteComponent() {
   return (
     <RootDocument>
       <Outlet />
