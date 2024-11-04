@@ -18,16 +18,20 @@ const updateCount = createServerFn('POST', async (addBy: number) => {
 
 export const Route = createFileRoute('/')({
   component: RouteComponent,
-  loader: async () => await getCount(),
+  loader: async () => ({
+    count: await getCount(),
+  }),
 })
 
 function RouteComponent() {
   const router = useRouter()
-  const state = Route.useLoaderData()
+  const { count } = Route.useLoaderData()
+
+  console.log('Hello')
 
   return (
     <button type="button" onClick={() => updateCount(1).then(() => router.invalidate())}>
-      Add 1 to {state} ?
+      Add 1 to {count} ?
     </button>
   )
 }
