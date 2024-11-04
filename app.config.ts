@@ -1,15 +1,15 @@
-import path from 'node:path'
 import { defineConfig } from '@tanstack/start/config'
+import viteAlias from 'vite-tsconfig-paths'
 
 export default defineConfig({
   server: {
     preset: 'bun',
   },
   vite: {
-    resolve: {
-      alias: {
-        '@': path.resolve(import.meta.dirname, './app'),
-      },
-    },
+    plugins: [
+      viteAlias({
+        projects: ['./tsconfig.json'],
+      }),
+    ],
   },
 })
