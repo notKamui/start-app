@@ -27,8 +27,6 @@ function RouteComponent() {
   const router = useRouter()
   const { count } = Route.useLoaderData()
 
-  console.log('Hello')
-
   return (
     <button type="button" onClick={() => updateCount(1).then(() => router.invalidate())}>
       Add 1 to {count} ?

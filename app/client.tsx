@@ -9,4 +9,4 @@ const router = createRouter()
 const root = document.getElementById('root')
 if (!root) throw new Error('Root element not found')
 
-hydrateRoot(root, <StartClient router={router} />)
+export default hydrateRoot(root, <StartClient router={router} />)
