@@ -1,6 +1,22 @@
+import indexCss from '@/styles/index.css?url'
+import { TansTackRouterDevtools } from '@/utils/tanstack-router-devtools'
+import { ClerkProvider } from '@clerk/tanstack-start'
+import { clerkClient, getAuth } from '@clerk/tanstack-start/server'
 import { Outlet, ScrollRestoration, createRootRoute } from '@tanstack/react-router'
-import { Body, Head, Html, Meta, Scripts } from '@tanstack/start'
-import type { ReactNode } from 'react'
+import { Body, Head, Html, Meta, Scripts, createServerFn } from '@tanstack/start'
+import { type ReactNode, Suspense } from 'react'
+
+const $fetchClerkUser = createServerFn('GET', async (_, context) => {
+  const auth = await getAuth(context.request)
+  if (!auth.userId) return { user: null }
+  const user = await clerkClient({}).users.getUser(auth.userId)
+  return {
+    user: {
+      ...user,
+      auth,
+    },
+  }
+})
 
 export const Route = createRootRoute({
   meta: () => [
@@ -15,16 +31,29 @@ export const Route = createRootRoute({
       title: 'Tanstack Start Starter',
     },
   ],
-  component: RouteComponent,
+  links: () => [
+    {
+      rel: 'stylesheet',
+      href: indexCss,
+    },
+  ],
+  beforeLoad: async () => {
+    const { user } = await $fetchClerkUser()
+    return { user }
+  },
+  component: () => {
+    return (
+      <ClerkProvider>
+        <RootDocument>
+          <Outlet />
+          <Suspense>
+            <TansTackRouterDevtools position="bottom-right" />
+          </Suspense>
+        </RootDocument>
+      </ClerkProvider>
+    )
+  },
 })
-
-function RouteComponent() {
-  return (
-    <RootDocument>
-      <Outlet />
-    </RootDocument>
-  )
-}
 
 function RootDocument({ children }: { children: ReactNode }) {
   return (

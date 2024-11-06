@@ -3,6 +3,7 @@ import { routeTree } from './routeTree.gen'
 
 export function createRouter() {
   return createTanstackRouter({
+    defaultPreload: 'intent',
     routeTree,
   })
 }

@@ -5,6 +5,9 @@ export default defineConfig({
   server: {
     preset: 'bun',
   },
+  tsr: {
+    autoCodeSplitting: false,
+  },
   vite: {
     plugins: [
       viteAlias({
